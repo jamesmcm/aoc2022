@@ -44,6 +44,17 @@ pub fn solve_part1(input: &[(CleanRange, CleanRange)]) -> usize {
         .count()
 }
 
+#[aoc(day4, part2)]
+pub fn solve_part2(input: &[(CleanRange, CleanRange)]) -> usize {
+    input
+        .into_iter()
+        .filter(|l| {
+            (l.0.start <= l.1.end && l.0.end >= l.1.start)
+                || (l.1.start <= l.0.end && l.1.end >= l.0.start)
+        })
+        .count()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -60,5 +71,19 @@ mod tests {
         let parsed_input = input_generator(inp);
 
         assert_eq!(solve_part1(&parsed_input), 2);
+    }
+
+    #[test]
+    fn test_2() {
+        let inp = "2-4,6-8
+2-3,4-5
+5-7,7-9
+2-8,3-7
+6-6,4-6
+2-6,4-8";
+
+        let parsed_input = input_generator(inp);
+
+        assert_eq!(solve_part2(&parsed_input), 4);
     }
 }
