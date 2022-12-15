@@ -65,17 +65,19 @@ pub fn solve_part1(input: &[LogLine]) -> i32 {
                     parents.pop();
                 } else {
                     parents.push(subdir.to_owned());
-                    dirsizes.entry(subdir.to_owned()).or_insert(0);
+                    dirsizes.entry(parents.join("/")).or_insert(0);
                 }
             }
 
             LogLine::Response(FileDir::Dir(_subdir)) => {}
             LogLine::Response(FileDir::File(size, _name)) => {
-                for p in parents.iter() {
+                let mut parents_clone = parents.clone();
+                for _n in 0..parents.len() {
                     dirsizes
-                        .entry(p.to_owned())
+                        .entry(parents_clone.join("/"))
                         .and_modify(|v| *v += size)
                         .or_insert(*size);
+                    parents_clone.pop();
                 }
             }
         }
