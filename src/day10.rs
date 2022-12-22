@@ -24,9 +24,35 @@ pub fn input_generator(input: &str) -> Vec<Instruction> {
     input.lines().map(Instruction::from_s).collect()
 }
 
+pub fn add_signal_strength(cycle: i32, x: i32, out: &mut i32) {
+    if (cycle - 20) % 40 == 0 {
+        *out += x * cycle;
+    }
+}
+
 #[aoc(day10, part1)]
 pub fn solve_part1(input: &[Instruction]) -> i32 {
-    todo!("Do transformations here")
+    let mut cycle: i32 = 1;
+    let mut x: i32 = 1;
+    let mut out: i32 = 0;
+
+    for ins in input {
+        match ins {
+            Instruction::Noop => {
+                add_signal_strength(cycle, x, &mut out);
+                cycle += 1
+            }
+            Instruction::Addx(val) => {
+                add_signal_strength(cycle, x, &mut out);
+                cycle += 1;
+                add_signal_strength(cycle, x, &mut out);
+                cycle += 1;
+                x += val;
+            }
+        }
+    }
+
+    out
 }
 
 #[cfg(test)]
